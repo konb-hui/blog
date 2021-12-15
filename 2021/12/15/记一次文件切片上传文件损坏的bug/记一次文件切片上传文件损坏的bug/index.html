@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
 <meta property="article:published_time" content="2021-12-15T07:11:01.000Z">
-<meta property="article:modified_time" content="2021-12-15T08:36:42.994Z">
+<meta property="article:modified_time" content="2021-12-15T09:43:22.613Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~2.45K
+                        ~2.44K
                     
                     字
                 </li>
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1639557402994"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1639561402613"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -193,7 +193,7 @@
 <p>经观察发现，所有文件的字节数之和等于生成后的上传文件的字节数，2097152 * 10 + 890880 = 21862400，所以不是文件合成导致的</p>
 <p><img src="/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/3.png"></p>
 <h3 id="3-打印前端上传的切片文件，发现所有切片文件的字节数之和等于原文件的字节数之和，2097152-10-889683-21861383，所以可以确定，只有小于2M的切片被变大了，且是在前端文件上传后，后端文件合成前被变大的。"><a href="#3-打印前端上传的切片文件，发现所有切片文件的字节数之和等于原文件的字节数之和，2097152-10-889683-21861383，所以可以确定，只有小于2M的切片被变大了，且是在前端文件上传后，后端文件合成前被变大的。" class="headerlink" title="3.打印前端上传的切片文件，发现所有切片文件的字节数之和等于原文件的字节数之和，2097152 * 10 + 889683 = 21861383，所以可以确定，只有小于2M的切片被变大了，且是在前端文件上传后，后端文件合成前被变大的。"></a>3.打印前端上传的切片文件，发现所有切片文件的字节数之和等于原文件的字节数之和，2097152 * 10 + 889683 = 21861383，所以可以确定，只有小于2M的切片被变大了，且是在前端文件上传后，后端文件合成前被变大的。</h3><p><img src="/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/4.png"></p>
-<h3 id="4-经过查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次"><a href="#4-经过查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次" class="headerlink" title="4.经过查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次"></a>4.经过查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次</h3><p>原代码:</p>
+<h3 id="4-查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次"><a href="#4-查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次" class="headerlink" title="4.查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次"></a>4.查看代码发现，在切片文件上传后，都有一个文件转存的过程，经过查看文件转存的代码，发现了小于2M的切片文件变大的原因。转存时由于代码的逻辑问题导致文件的部分字节被重复写了一次</h3><p>原代码:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将上传的文件保存到新文件中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> uploadFile 上传的文件 MultipartFile</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> saveFile 新保存的文件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">copyUploadFile</span><span class="params">(MultipartFile uploadFile, File saveFile)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">   <span class="keyword">try</span>(InputStream inputStream = uploadFile.getInputStream();</span><br><span class="line">      BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">      OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(saveFile);</span><br><span class="line">      BufferedOutputStream bufferedOutputStream = <span class="keyword">new</span> BufferedOutputStream(outputStream)) &#123;</span><br><span class="line">       <span class="comment">//当文件剩余的部分小于1024个字节时，data中不足1024的部分仍是上一个1024个字节的部分，直接write就导致那部分重新写了</span></span><br><span class="line">      <span class="keyword">while</span> (bufferedInputStream.read(data) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">         bufferedOutputStream.write(data);</span><br><span class="line">         bufferedOutputStream.flush();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> SrsException(<span class="number">300</span>, <span class="string">&quot;文件读取失败&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>修改后的代码：</p>
