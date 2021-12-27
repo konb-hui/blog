@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
 <meta property="article:published_time" content="2021-12-26T06:47:27.000Z">
-<meta property="article:modified_time" content="2021-12-27T07:29:34.672Z">
+<meta property="article:modified_time" content="2021-12-27T07:43:13.267Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -172,7 +172,7 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        ~2.54K
+                        ~2.53K
                     
                     字
                 </li>
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1640590174672"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1640590993267"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -221,24 +221,14 @@
 <p>jstack工具的主要选项</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/3.jpg"></p>
 <h2 id="二、JDK可视化工具"><a href="#二、JDK可视化工具" class="headerlink" title="二、JDK可视化工具"></a>二、JDK可视化工具</h2><h3 id="1-JConsole（Java-Monitoring-and-Management-Console）-Java监视与管理控制台"><a href="#1-JConsole（Java-Monitoring-and-Management-Console）-Java监视与管理控制台" class="headerlink" title="1.JConsole（Java Monitoring and Management Console）: Java监视与管理控制台"></a>1.JConsole（Java Monitoring and Management Console）: Java监视与管理控制台</h3><h4 id="1-启动JConsole"><a href="#1-启动JConsole" class="headerlink" title="(1) 启动JConsole"></a>(1) 启动JConsole</h4><p>启动JConsole后，将自动搜索出本机运行的所以虚拟机进程，不需要再使用jps来查询了。</p>
-<img src="/blog/JDK-common-gadgets/4.png" style="zoom: 67%;">
-
-
-
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/4.png"></p>
 <p>进入JConsole主界面，可以看到主界面共包括“概述”、“内存”、“线程”、“类”、“VM概要”和“MBean”六个页签，如下图所示。</p>
-<img src="/blog/JDK-common-gadgets/5.png" style="zoom:67%;">
-
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/5.png"></p>
 <p>概述页签显示的是整个虚拟机主要运行数据的概述，包括”堆内存使用情况“、”线程“、”类“、”CPU使用情况“四项信息的曲线图。</p>
 <h4 id="2-内存监控"><a href="#2-内存监控" class="headerlink" title="(2) 内存监控"></a>(2) 内存监控</h4><p>“内存”页签相当于可视化的jstat命令，用于监视受收集器管理的虚拟机内存（Java堆和永久代（JDK1.8以后改为元空间了））的变化趋势。</p>
-<img src="/blog/JDK-common-gadgets/6.png" style="zoom:67%;">
-
-
-
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/6.png"></p>
 <h4 id="3-线程监控"><a href="#3-线程监控" class="headerlink" title="(3) 线程监控"></a>(3) 线程监控</h4><p>“线程”页签的功能相当于可视化的jstack命令，遇到线程停顿的时候可以使用这个页签进行监控分析。</p>
-<img src="/blog/JDK-common-gadgets/7.jpg" style="zoom:67%;">
-
-
-
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/7.jpg"></p>
 <h3 id="2-VisualVM（All-in-One-Java-Troubleshooting-Tool）-多合一故障处理工具"><a href="#2-VisualVM（All-in-One-Java-Troubleshooting-Tool）-多合一故障处理工具" class="headerlink" title="2.VisualVM（All-in-One Java Troubleshooting Tool） : 多合一故障处理工具"></a>2.VisualVM（All-in-One Java Troubleshooting Tool） : 多合一故障处理工具</h3><p>除了拥有运行监视、故障处理的功能外，还拥有很多其他方面的功能。如性能分析（Profiling），而且VisualVM还有一个很大的优点：不需要被监视的程序基于特殊Agent运行，因此它对应用程序的实际性能的影响很小，使得它可以直接应用在生产环境中。这个优点是JProfiler、YourKit等工具无法与之媲美的。</p>
 <h4 id="1-插件安装"><a href="#1-插件安装" class="headerlink" title="(1) 插件安装"></a>(1) 插件安装</h4><p>VisualVM精华的功能在于可以安装插件。在有网络的情况下，点击“工具”–&gt;“插件”菜单，弹出如下图所示的插件页签，在页签的“可用插件”中列举了当前版本VisualVM可以使用的插件，选中插件后在右边窗口将显示插件的基本信息，如开发者、版本、功能描述等。</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/8.jpg"></p>
