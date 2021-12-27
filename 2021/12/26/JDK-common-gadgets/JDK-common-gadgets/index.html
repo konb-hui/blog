@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
 <meta property="article:published_time" content="2021-12-26T06:47:27.000Z">
-<meta property="article:modified_time" content="2021-12-27T07:12:41.225Z">
+<meta property="article:modified_time" content="2021-12-27T07:17:19.283Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1640589161225"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1640589439283"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -243,7 +243,7 @@
 <h4 id="1-插件安装"><a href="#1-插件安装" class="headerlink" title="(1) 插件安装"></a>(1) 插件安装</h4><p>VisualVM精华的功能在于可以安装插件。在有网络的情况下，点击“工具”–&gt;“插件”菜单，弹出如下图所示的插件页签，在页签的“可用插件”中列举了当前版本VisualVM可以使用的插件，选中插件后在右边窗口将显示插件的基本信息，如开发者、版本、功能描述等。</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/8.jpg"></p>
 <p>VisualVM的“概述”、“监视”、“线程”、“MBeans”的功能和前面介绍的JConsole差别不大。</p>
-<p><img src="/blog/JDK-common-gadgets/9.jpg"></p>
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/9.jpg"></p>
 <h4 id="2-生成和浏览堆转储快照"><a href="#2-生成和浏览堆转储快照" class="headerlink" title="(2) 生成和浏览堆转储快照"></a>(2) 生成和浏览堆转储快照</h4><p>在VisualVM中生成dump文件有两种方式</p>
 <p>a.在“应用程序”窗口中右键单击应用程序节点，然后选择“堆Dump”；</p>
 <p>b.在“应用程序”窗口中双击应用程序节点以打开应用程序标签，然后在“监视”标签总单击“堆Dump”。</p>
@@ -251,7 +251,7 @@
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/10.png"></p>
 <h4 id="3-分析程序性能"><a href="#3-分析程序性能" class="headerlink" title="(3) 分析程序性能"></a>(3) 分析程序性能</h4><p>在Profiler页签中，VisualVM提供了程序运行期间方法级的CPU执行时间分析及内存分析，进行分析会对程序运行性能产生较大的影响，一般不在生产环境中使用该项功能</p>
 <p>开始分析前，先选择“CPU”和“内存”按钮中的一个，然后切换到应用程序中进行操作，VisualVM会记录这段时间中应用程序执行过的方法。如果是CPU分析，将会统计每个方法的执行次数、执行耗时；如果是内存分析则会统计每个方法关联的对象数及所占空间。</p>
-<p><img src="/blog/JDK-common-gadgets/11.png"></p>
+<p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/11.png"></p>
 <p>(4) BTrace动态日志跟踪</p>
 <p>BTrace能在不停止目标程序运行的情况下，通过HotSpot虚拟机的HotSwap技术动态加入原本并不存在的调试代码。在安装BTrace插件后，应用程序面板右键点击要调试的程序，会出现“Trace Application”菜单，点击进入BTrace面板。</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/12.png"></p>
