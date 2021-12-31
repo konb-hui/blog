@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
 <meta property="article:published_time" content="2021-12-26T06:47:27.000Z">
-<meta property="article:modified_time" content="2021-12-28T09:05:04.277Z">
+<meta property="article:modified_time" content="2021-12-30T09:08:18.574Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -181,7 +181,7 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1640682304277"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1640855298574"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
@@ -242,8 +242,7 @@
 <h4 id="3-分析程序性能"><a href="#3-分析程序性能" class="headerlink" title="(3) 分析程序性能"></a>(3) 分析程序性能</h4><p>在Profiler页签中，VisualVM提供了程序运行期间方法级的CPU执行时间分析及内存分析，进行分析会对程序运行性能产生较大的影响，一般不在生产环境中使用该项功能</p>
 <p>开始分析前，先选择“CPU”和“内存”按钮中的一个，然后切换到应用程序中进行操作，VisualVM会记录这段时间中应用程序执行过的方法。如果是CPU分析，将会统计每个方法的执行次数、执行耗时；如果是内存分析则会统计每个方法关联的对象数及所占空间。</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/11.png"></p>
-<p>(4) BTrace动态日志跟踪</p>
-<p>BTrace能在不停止目标程序运行的情况下，通过HotSpot虚拟机的HotSwap技术动态加入原本并不存在的调试代码。在安装BTrace插件后，应用程序面板右键点击要调试的程序，会出现“Trace Application”菜单，点击进入BTrace面板。</p>
+<h4 id="4-BTrace动态日志跟踪"><a href="#4-BTrace动态日志跟踪" class="headerlink" title="(4) BTrace动态日志跟踪"></a>(4) BTrace动态日志跟踪</h4><p>BTrace能在不停止目标程序运行的情况下，通过HotSpot虚拟机的HotSwap技术动态加入原本并不存在的调试代码。在安装BTrace插件后，应用程序面板右键点击要调试的程序，会出现“Trace Application”菜单，点击进入BTrace面板。</p>
 <p><img src="/blog/2021/12/26/JDK-common-gadgets/JDK-common-gadgets/12.png"></p>
 
         </div>
@@ -335,7 +334,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2021-12-28</span>
+                <span>最后编辑：2021-12-30</span>
                 </div>
             </div>
         </footer>
@@ -347,6 +346,10 @@
                 <a title=" 记一次文件切片上传文件损坏的bug" href="/blog/2021/12/15/记一次文件切片上传文件损坏的bug/记一次文件切片上传文件损坏的bug/">&lt; 上一篇</a>
             </div>
             
+            
+            <div class="nav-next clearfix">
+                <a title=" 设计模式系列：单例模式" href="/blog/2021/12/26/design-pattern/singleton-mode/singleton-mode/">下一篇 &gt;</a>
+            </div>
             
         </nav>
     
@@ -383,7 +386,7 @@
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/">成神之路</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E4%BA%8B%E4%BB%B6/">神秘事件</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E5%AE%9D%E8%97%8F/">神秘宝藏</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/">成神之路</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E4%BA%8B%E4%BB%B6/">神秘事件</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E5%AE%9D%E8%97%8F/">神秘宝藏</a><span class="category-list-count">1</span></li></ul>
   </aside>
 
 
@@ -396,6 +399,12 @@
   <div class="tab-content">
       <ul class="list-group">
         
+        
+          
+          
+            <a class="list-group-item" href="/blog/2021/12/26/design-pattern/singleton-mode/singleton-mode/"><i class="fa  fa-book"></i> 设计模式系列：单例模式</a>
+            
+          
         
           
           
