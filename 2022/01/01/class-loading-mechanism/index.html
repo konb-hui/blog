@@ -4,7 +4,7 @@
   <!-- 元数据 -->
   <meta charset="utf-8">
   <link rel="icon" href="">
-  <title>konb的博客</title>
+  <title>聊聊Java虚拟机的类加载机制 | konb的博客</title>
   <meta name="author" content="konb" />
   <meta http-equiv="Cache-Control" content="no-transform" />
   <meta http-equiv="Cache-Control" content="no-siteapp" />
@@ -15,12 +15,16 @@
   
     <meta name="keywords" content="" />
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="konb的博客">
-<meta property="og:url" content="https://konb-hui.github.io/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html">
+  <meta name="description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊Java虚拟机的类加载机制">
+<meta property="og:url" content="https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/index.html">
 <meta property="og:site_name" content="konb的博客">
+<meta property="og:description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
+<meta property="article:published_time" content="2022-01-01T04:25:14.000Z">
+<meta property="article:modified_time" content="2022-01-01T04:37:21.071Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -154,73 +158,141 @@
 
         
 
+            <article>
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
             
-    
-    
-        <article class="kratos-hentry clearfix">
-            <div class="kratos-entry-border-new clearfix">
+                <h1 class="kratos-entry-title text-center">聊聊Java虚拟机的类加载机制</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><i class="fa fa-calendar"></i> 2022-01-01</li>
+                <li><i class="fa fa-user"></i> 作者 konb</li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        71
+                    
+                    字
+                </li>
                 
-                <div class="kratos-entry-thumb-new">
-                    <a href="/blog/2021/12/31/design-pattern/singleton-mode/singleton-mode/">
-                        
-                            <img class="kratos-entry-thumb-new-img">
-                        
-                    </a>
-                </div>
-                <div class="kratos-post-inner-new">
-                    <header class="kratos-entry-header-new">
-                            <a class="label-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/">成神之路</a> <a class="label-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-                        <h2 class="kratos-entry-title-new"><a href="/blog/2021/12/31/design-pattern/singleton-mode/singleton-mode/">设计模式系列：单例模式</a>
-                    </header>
-                    <div class="kratos-entry-content-new">
-                        <p>
-                            
-                                单例模式是最简单的设计模式之一，不过也是非常常用的一种创建型的设计模式。
-一、介绍
-目的：保证一个类只有一个实例，防止一个全局使用的类频繁的创建和销毁。
-优点：
-在内存中只有一个实例，减少内存的开销，尤其是在频繁创建和销毁实例的时候
-...
-                            
-                        </p>
-                    </div>
-                </div>
-                <footer class="kratos-post-meta-new">
-                    <span class="pull-left">
-                        <a>
-                            <i class="fa fa-calendar"></i>
-                            2021-12-31
-                        </a>
-                        <a>
-                            
-                        </a>
-                        
-                            <!-- 当前仅支持valine/waline自带的统计功能 -->
-                            
-                        
-                        
-                            <!-- 当前仅支持waline自带的统计功能 -->
-                            
-                        
-                    </span>
-                    <span class="pull-right">
-                        <a class="read-more" href="/blog/2021/12/31/design-pattern/singleton-mode/singleton-mode/" title="阅读全文">阅读全文<i class="fa fa-chevron-circle-right"></i></a>
-                    </span>
-                </footer>
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                本文最后编辑于 <time datetime="1641011841071"></time> 前，其中的内容可能需要更新。
             </div>
-        </article>
-    
+            
+            <hr />
+            <p>学过Java的都知道<code>.java</code>文件需要通过编译变成<code>.class</code>文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？</p>
 
-
-
-
-
-    <div class="hidden">
-        <!-- 加载文章阅读对应的统计功能，评论自带的那种 -->
+        </div>
         
+            <div class="kratos-copyright text-center clearfix">
+                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> 分享</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
     </div>
-
-
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/";
+            const title         = "「聊聊Java虚拟机的类加载机制」";
+            const excerpt       = `学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？
+`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    
+                </div>
+                <div class="pull-date">
+                <span>最后编辑：2022-01-01</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 设计模式系列：单例模式" href="/blog/2021/12/31/design-pattern/singleton-mode/singleton-mode/">&lt; 上一篇</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+</article>
 
         
 
@@ -233,8 +305,6 @@
 
 <section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
     <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
-    
-        <div class="sticky-area">
     
     
                 <aside id="krw-about" class="widget widget-kratos-about clearfix">
@@ -249,6 +319,8 @@
     </div>
 </aside>
             
+                    <div class="sticky-area">
+                
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
     <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
