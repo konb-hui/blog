@@ -15,16 +15,16 @@
   
     <meta name="keywords" content="" />
   
-  <meta name="description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？">
+  <meta name="description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？ 一、介绍一个类从被加载进内存直到被从内存中卸载，整个生命周期主要包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）、卸载（U">
 <meta property="og:type" content="article">
 <meta property="og:title" content="聊聊Java虚拟机的类加载机制">
-<meta property="og:url" content="https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/index.html">
+<meta property="og:url" content="https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/index.html">
 <meta property="og:site_name" content="konb的博客">
-<meta property="og:description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？">
+<meta property="og:description" content="学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？ 一、介绍一个类从被加载进内存直到被从内存中卸载，整个生命周期主要包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）、卸载（U">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://konb-hui.github.io/blog/null">
 <meta property="article:published_time" content="2022-01-01T04:25:14.000Z">
-<meta property="article:modified_time" content="2022-01-01T04:37:21.071Z">
+<meta property="article:modified_time" content="2022-01-08T10:38:27.488Z">
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/null">
@@ -172,19 +172,19 @@
                     <i class="fa fa-edit"></i> 
                     
                     
-                        71
+                        1273
                     
                     字
                 </li>
                 
-                    <li id="/blog/2022/01/01/class-loading-mechanism/" class="leancloud_visitors" data-flag-title="聊聊Java虚拟机的类加载机制">
+                    <li id="/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/" class="leancloud_visitors" data-flag-title="聊聊Java虚拟机的类加载机制">
                         <i class="fa fa-eye"></i>
                         <span class="leancloud-visitors-count"> </span> 次阅读
                     </li>
                     
                         <li>
                             <i class="fa fa-commenting-o"></i>
-                            <span data-xid="/blog/2022/01/01/class-loading-mechanism/" class="waline-comment-count"> </span> 条评论
+                            <span data-xid="/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/" class="waline-comment-count"> </span> 条评论
                         </li>
                     
                 
@@ -192,11 +192,55 @@
         </header>
         <div class="kratos-post-content">
             <div id="expire-alert" class="alert alert-warning hidden" role="alert">
-                本文最后编辑于 <time datetime="1641011841071"></time> 前，其中的内容可能需要更新。
+                本文最后编辑于 <time datetime="1641638307488"></time> 前，其中的内容可能需要更新。
             </div>
             
             <hr />
             <p>学过Java的都知道<code>.java</code>文件需要通过编译变成<code>.class</code>文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？</p>
+<h3 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h3><p>一个类从被加载进内存直到被从内存中卸载，整个生命周期主要包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）、卸载（Unloading）七个阶段。其中验证、准备、解析又可以总称为连接（Linking）。每个步骤的发生顺序见下图。</p>
+<p><img src="/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/1.png"></p>
+<p>加载、验证、准备、初始化、卸载五个阶段是固定的，不过这个固定指的是开始的时间，实际上它们一般是交叉进行的。在某些情况，解析可能在初始化之后开始，为了支持Java语言的运行时绑定（动态绑定）。</p>
+<h3 id="二、类加载的过程"><a href="#二、类加载的过程" class="headerlink" title="二、类加载的过程"></a>二、类加载的过程</h3><h4 id="1-加载"><a href="#1-加载" class="headerlink" title="1.加载"></a>1.加载</h4><p>加载阶段虚拟机将会执行如下3件事：</p>
+<ul>
+<li><p>通过一个类的全限定名来获取定义此类的二进制字节流；</p>
+</li>
+<li><p>将这个字节流所代表的静态存储结构转换为方法区运行时数据结构；</p>
+</li>
+<li><p>在Java对生成一个代表该类的Java,lang,Class对象，作为方法区数据的访问路口。</p>
+</li>
+</ul>
+<p>针对于第一件事，虚拟机规范并没有指明字节流要从那里获取和怎样获取。很多Java技术都建立在这一基础上，例如：</p>
+<ul>
+<li><p>从ZIP包中读取，最终成为日后JAR、EAR、WAR格式的基础</p>
+</li>
+<li><p>从网络中获取</p>
+</li>
+<li><p>运行时动态生成，即动态代理</p>
+</li>
+<li><p>由其他文件生成，如JSP</p>
+</li>
+<li><p>从数据库读取，有些中间件服务器可以选择把程序安装到数据库中来完成程序代码在集群间的分布</p>
+</li>
+</ul>
+<h4 id="2-验证"><a href="#2-验证" class="headerlink" title="2.验证"></a>2.验证</h4><p>为了确保Class文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自生的安全。大致分为四个阶段：文件格式验证、元数据验证、字节码验证和符号引用验证。</p>
+<h5 id="（1）文件格式验证"><a href="#（1）文件格式验证" class="headerlink" title="（1）文件格式验证"></a>（1）文件格式验证</h5><p>用于验证Class文件的格式是否符合规范，可能包括以下部分：</p>
+<ul>
+<li>是否以魔数0xCAFFBABY开头</li>
+<li>主、次版本是否在当前虚拟机可处理范围内</li>
+<li>常量池的常量是否有不被支持的类型</li>
+<li>指向常量的各种索引值是否由指向不存在的常量或者不符合类型的常量</li>
+<li>CONSTANT_Utf8_info型的常量师傅有不符合UTF8编码的数据</li>
+<li>Class文件中各个部分及文件本身是否有被删除的或附加的其他信息</li>
+</ul>
+<p>上面部分只是截取HotSpot虚拟机源码的一小部分。经过该阶段的验证后，字节流才会进入内存的方法区进行存储。</p>
+<h5 id="（2）元数据验证"><a href="#（2）元数据验证" class="headerlink" title="（2）元数据验证"></a>（2）元数据验证</h5><p>对字节码描述的信息进行语义分析，保证符合Java语言规范。</p>
+<h5 id="（3）字节码验证"><a href="#（3）字节码验证" class="headerlink" title="（3）字节码验证"></a>（3）字节码验证</h5><p>进行数据流和控制流的分析，对类的方法体进行校验分析，保证该类的方法在运行时不会做出危害虚拟机安全的行为。例如：</p>
+<ul>
+<li>保证任意时刻操作数栈的数据类型与指令代码序列都可以配合工作。不会出现类似放置了一个int类型，却使用long类型来加载</li>
+<li>保证指令跳转不会跳转到方法体以外的指令上去</li>
+<li>保证方法体重的类型转发是有效的。例如子类可以赋值给父类，但父类不可以赋值给子类</li>
+</ul>
+<h5 id="（4）符号引用验证"><a href="#（4）符号引用验证" class="headerlink" title="（4）符号引用验证"></a>（4）符号引用验证</h5><p>对类自身以外（常量池中的各种符号引用）的信息进行匹配性的校验。</p>
 
         </div>
         
@@ -250,7 +294,7 @@
     <script type="text/javascript">
         $(()=>{
             new QRCode("wechat-qr", {
-                text: "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/",
+                text: "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/",
                 width: 150,
                 height: 150,
                 correctLevel : QRCode.CorrectLevel.H
@@ -262,10 +306,10 @@
             const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
             const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
             const twitterBase   = "https://twitter.com/intent/tweet?";
-            const hostUrl       = "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/";
+            const hostUrl       = "https://konb-hui.github.io/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/";
             const title         = "「聊聊Java虚拟机的类加载机制」";
             const excerpt       = `学过Java的都知道.java文件需要通过编译变成.class文件才能运行，那么Java虚拟机是如何把这些Class文件进行加载和运行的呢？
-`;
+一、介绍一个类从被加载进内存直到被从内存中卸载，整个生命周期主要包括：加载（Loading）...`;
             let _URL;
             switch (dest) {
                 case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
@@ -287,7 +331,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-01-01</span>
+                <span>最后编辑：2022-01-08</span>
                 </div>
             </div>
         </footer>
@@ -309,7 +353,7 @@
         const init = () => {
             new Waline(Object.assign({
                 el: '#w-comments',
-                path: '/blog/2022/01/01/class-loading-mechanism/'
+                path: '/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/'
             }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
         }
         if (typeof Waline == 'undefined') {
@@ -371,7 +415,7 @@
         
           
           
-            <a class="list-group-item" href="/blog/2022/01/01/class-loading-mechanism/"><i class="fa  fa-book"></i> 聊聊Java虚拟机的类加载机制</a>
+            <a class="list-group-item" href="/blog/2022/01/01/class-loading-mechanism/class-loading-mechanism/"><i class="fa  fa-book"></i> 聊聊Java虚拟机的类加载机制</a>
             
           
         
