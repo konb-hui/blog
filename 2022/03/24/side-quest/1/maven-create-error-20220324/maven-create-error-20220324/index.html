@@ -29,7 +29,6 @@
 <meta property="article:tag" content="maven">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
-<meta name="twitter:site" content="@null">
   
   <!-- 站点验证相关 -->
   
@@ -49,6 +48,7 @@
   
   <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
   
   
     <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
@@ -150,23 +150,26 @@
                 <div id="main" class="row">
                     
 
-
         
 
             <section class="col-md-8">
 
         
 
-            <article>
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center">解决创建maven项目的报错</h1>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">解决创建maven项目的报错</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><i class="fa fa-calendar"></i> 2022-03-24</li>
-                <li><i class="fa fa-user"></i> 作者 konb</li>
+                <li><time datetime="2022-03-24T01:59:18.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-03-24</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
                 <li>
                     <i class="fa fa-edit"></i> 
                     
@@ -175,17 +178,6 @@
                     
                     字
                 </li>
-                
-                    <li id="/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/" class="leancloud_visitors" data-flag-title="解决创建maven项目的报错">
-                        <i class="fa fa-eye"></i>
-                        <span class="leancloud-visitors-count"> </span> 次阅读
-                    </li>
-                    
-                        <li>
-                            <i class="fa fa-commenting-o"></i>
-                            <span data-xid="/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/" class="waline-comment-count"> </span> 条评论
-                        </li>
-                    
                 
             </ul>
         </header>
@@ -200,7 +192,7 @@
                 </div>
             
             <hr />
-            <h5 id="【任务标题】"><a href="#【任务标题】" class="headerlink" title="【任务标题】"></a>【任务标题】</h5><p>解决创建maven项目的报错</p>
+            <div itemprop="articleBody"><h5 id="【任务标题】"><a href="#【任务标题】" class="headerlink" title="【任务标题】"></a>【任务标题】</h5><p>解决创建maven项目的报错</p>
 <h5 id="【状态】"><a href="#【状态】" class="headerlink" title="【状态】"></a>【状态】</h5><p>已解决</p>
 <h5 id="【任务奖励】"><a href="#【任务奖励】" class="headerlink" title="【任务奖励】"></a>【任务奖励】</h5><p>铜币 * 50</p>
 <h5 id="【要求时间】"><a href="#【要求时间】" class="headerlink" title="【要求时间】"></a>【要求时间】</h5><p>马上</p>
@@ -212,11 +204,11 @@
 <p><img src="/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/2.png"></p>
 <p>经过观察配置文件发现注释符号少了一半，这个其实也很坑，由于这个注释符号后面又紧接着一个注释，很难发现少了一半，因为notepad++还是会把这部分标绿，显示成注释的状态。加回另一半注释符号完美运行。</p>
 <p><img src="/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/3.png"></p>
-
+</div>
         </div>
         
             <div class="kratos-copyright text-center clearfix">
-                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
             </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -297,7 +289,6 @@
         };
     </script>
 </div>
-
                 
                 </div>
             
@@ -307,7 +298,7 @@
                     <a class="tag-none-link" href="/blog/tags/maven/" rel="tag">maven</a>
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-03-24</span>
+                    <time datetime="2022-03-24T07:32:27.434Z" itemprop="dateModified">最后编辑：2022-03-24</time>
                 </div>
             </div>
         </footer>
@@ -327,28 +318,7 @@
         </nav>
     
     
-        <div id="w-comments" class="post-comments"></div>
-<script>
-    var load_comm = () => {
-        const init = () => {
-            new Waline(Object.assign({
-                el: '#w-comments',
-                path: '/blog/2022/03/24/side-quest/1/maven-create-error-20220324/maven-create-error-20220324/'
-            }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
-        }
-        if (typeof Waline === 'undefined') {
-            const src = 'https://unpkg.com/@waline/client/dist/Waline.min.js';
-            $.getScript(src, init);
-        } else {
-            init();
-        }
-    };
-</script>
-<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
-
-    
 </article>
-
 
         
 
@@ -400,7 +370,6 @@
         </a>
     </div>
 </aside>
-
             
                     <div class="sticky-area">
                 
@@ -409,13 +378,12 @@
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
         文章目录
-        <span class="toc-progress-bar"></span>
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
         <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E6%A0%87%E9%A2%98%E3%80%91"><span class="toc-text">【任务标题】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E7%8A%B6%E6%80%81%E3%80%91"><span class="toc-text">【状态】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E5%A5%96%E5%8A%B1%E3%80%91"><span class="toc-text">【任务奖励】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%A6%81%E6%B1%82%E6%97%B6%E9%97%B4%E3%80%91"><span class="toc-text">【要求时间】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A7%94%E6%89%98%E4%BA%BA%E3%80%91"><span class="toc-text">【委托人】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85%E3%80%91"><span class="toc-text">【任务详情】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E6%89%BF%E6%8E%A5%E4%BA%BA%E3%80%91"><span class="toc-text">【承接人】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E5%86%B3%E8%BF%87%E7%A8%8B%E3%80%91"><span class="toc-text">【解决过程】</span></a></li></ol>
     </div>
 </aside>
-
                 
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
@@ -432,7 +400,6 @@
         <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
       </div>
   </aside>
-
 
             
                 
@@ -488,11 +455,9 @@
   </div>
   </aside>
 
-
             
     </div>
 </section>
-
         
         </div>
     </div>
@@ -585,7 +550,6 @@
         fixed="true"
     >
     </meting-js>
-
 
 
 

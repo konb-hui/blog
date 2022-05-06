@@ -29,7 +29,6 @@
 <meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
-<meta name="twitter:site" content="@null">
   
   <!-- 站点验证相关 -->
   
@@ -49,6 +48,7 @@
   
   <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
   
   
     <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
@@ -150,23 +150,26 @@
                 <div id="main" class="row">
                     
 
-
         
 
             <section class="col-md-8">
 
         
 
-            <article>
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2022/03/25/side-quest/2/static-method-use-bean-20220325/">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center">静态方法中使用spring管理的bean</h1>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">静态方法中使用spring管理的bean</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><i class="fa fa-calendar"></i> 2022-03-25</li>
-                <li><i class="fa fa-user"></i> 作者 konb</li>
+                <li><time datetime="2022-03-25T08:30:01.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-03-25</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
                 <li>
                     <i class="fa fa-edit"></i> 
                     
@@ -175,17 +178,6 @@
                     
                     字
                 </li>
-                
-                    <li id="/blog/2022/03/25/side-quest/2/static-method-use-bean-20220325/" class="leancloud_visitors" data-flag-title="静态方法中使用spring管理的bean">
-                        <i class="fa fa-eye"></i>
-                        <span class="leancloud-visitors-count"> </span> 次阅读
-                    </li>
-                    
-                        <li>
-                            <i class="fa fa-commenting-o"></i>
-                            <span data-xid="/blog/2022/03/25/side-quest/2/static-method-use-bean-20220325/" class="waline-comment-count"> </span> 条评论
-                        </li>
-                    
                 
             </ul>
         </header>
@@ -200,7 +192,7 @@
                 </div>
             
             <hr />
-            <h5 id="【任务标题】"><a href="#【任务标题】" class="headerlink" title="【任务标题】"></a>【任务标题】</h5><p>静态方法中使用spring管理的bean</p>
+            <div itemprop="articleBody"><h5 id="【任务标题】"><a href="#【任务标题】" class="headerlink" title="【任务标题】"></a>【任务标题】</h5><p>静态方法中使用spring管理的bean</p>
 <h5 id="【状态】"><a href="#【状态】" class="headerlink" title="【状态】"></a>【状态】</h5><p>已解决</p>
 <h5 id="【任务奖励】"><a href="#【任务奖励】" class="headerlink" title="【任务奖励】"></a>【任务奖励】</h5><p>银币 * 2</p>
 <h5 id="【要求时间】"><a href="#【要求时间】" class="headerlink" title="【要求时间】"></a>【要求时间】</h5><p>1 Day</p>
@@ -216,11 +208,11 @@
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.spm.study.demoproject.area.soft.server;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSON;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.Service.basic.NormalMessageService;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.Service.notice.MessageService;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.entity.T_USER;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.entity.basic.NormalMessage;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.entity.notice.ChangeBatch;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.entity.notice.Message;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.util.SessionUtil;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.util.basic.MessageEnum;</span><br><span class="line"><span class="keyword">import</span> com.spm.study.demoproject.area.soft.util.manual.ManualConstant;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.PostConstruct;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ConcurrentHashMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> konb</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.@PostConstruct修饰非静态的void方法，保证该方法会在构造函数之后，init()方法之前执行</span></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initServerManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        serverManager = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//2.添加要使用的被spring管理的对象属性</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageService messageService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> NormalMessageService normalMessageService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;Integer, WebSocketServer&gt; servers = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1.添加当前类的静态属性</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ServerManager serverManager;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">broadCast</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getTotal</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> servers.size();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;Integer, WebSocketServer&gt; <span class="title">getServers</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> servers;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendNoticeInformation</span><span class="params">(Integer userId, String message, ChangeBatch changeBatch)</span> </span>&#123;</span><br><span class="line">        WebSocketServer webSocketServer = servers.get(userId);</span><br><span class="line">        Message msg = <span class="keyword">new</span> Message();</span><br><span class="line">        msg.setContent(message);</span><br><span class="line">        msg.setToUser(userId);</span><br><span class="line">        msg.setBatch(changeBatch.getBatch());</span><br><span class="line">        msg.setCid(changeBatch.getId());</span><br><span class="line">        <span class="comment">//4.调用messageService</span></span><br><span class="line">        serverManager.messageService.save(msg);</span><br><span class="line">        <span class="keyword">if</span> (webSocketServer != <span class="keyword">null</span>) &#123;</span><br><span class="line">            webSocketServer.sendMessage(message);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(WebSocketServer server)</span> </span>&#123;</span><br><span class="line">        servers.remove(server.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Integer userId)</span> </span>&#123;</span><br><span class="line">        servers.remove(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询当前用户是否在线</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> boolean</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isOnline</span><span class="params">(Integer userId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> servers.get(userId) != <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
+</div>
         </div>
         
             <div class="kratos-copyright text-center clearfix">
-                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
             </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -303,7 +295,6 @@
         };
     </script>
 </div>
-
                 
                 </div>
             
@@ -313,7 +304,7 @@
                     <a class="tag-none-link" href="/blog/tags/spring/" rel="tag">spring</a>
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-03-25</span>
+                    <time datetime="2022-03-25T09:21:31.274Z" itemprop="dateModified">最后编辑：2022-03-25</time>
                 </div>
             </div>
         </footer>
@@ -333,28 +324,7 @@
         </nav>
     
     
-        <div id="w-comments" class="post-comments"></div>
-<script>
-    var load_comm = () => {
-        const init = () => {
-            new Waline(Object.assign({
-                el: '#w-comments',
-                path: '/blog/2022/03/25/side-quest/2/static-method-use-bean-20220325/'
-            }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
-        }
-        if (typeof Waline === 'undefined') {
-            const src = 'https://unpkg.com/@waline/client/dist/Waline.min.js';
-            $.getScript(src, init);
-        } else {
-            init();
-        }
-    };
-</script>
-<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
-
-    
 </article>
-
 
         
 
@@ -406,7 +376,6 @@
         </a>
     </div>
 </aside>
-
             
                     <div class="sticky-area">
                 
@@ -415,13 +384,12 @@
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
         文章目录
-        <span class="toc-progress-bar"></span>
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
         <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E6%A0%87%E9%A2%98%E3%80%91"><span class="toc-text">【任务标题】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E7%8A%B6%E6%80%81%E3%80%91"><span class="toc-text">【状态】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E5%A5%96%E5%8A%B1%E3%80%91"><span class="toc-text">【任务奖励】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%A6%81%E6%B1%82%E6%97%B6%E9%97%B4%E3%80%91"><span class="toc-text">【要求时间】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E5%A7%94%E6%89%98%E4%BA%BA%E3%80%91"><span class="toc-text">【委托人】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E4%BB%BB%E5%8A%A1%E8%AF%A6%E6%83%85%E3%80%91"><span class="toc-text">【任务详情】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E6%89%BF%E6%8E%A5%E4%BA%BA%E3%80%91"><span class="toc-text">【承接人】</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E3%80%90%E8%A7%A3%E5%86%B3%E8%BF%87%E7%A8%8B%E3%80%91"><span class="toc-text">【解决过程】</span></a></li></ol>
     </div>
 </aside>
-
                 
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
@@ -438,7 +406,6 @@
         <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
       </div>
   </aside>
-
 
             
                 
@@ -494,11 +461,9 @@
   </div>
   </aside>
 
-
             
     </div>
 </section>
-
         
         </div>
     </div>
@@ -591,7 +556,6 @@
         fixed="true"
     >
     </meting-js>
-
 
 
 

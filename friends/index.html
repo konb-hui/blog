@@ -26,7 +26,6 @@
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
-<meta name="twitter:site" content="@null">
   
   <!-- 站点验证相关 -->
   
@@ -46,6 +45,7 @@
   
   <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
   
   
     <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
@@ -147,18 +147,18 @@
                 <div id="main" class="row">
                     
 
-
         
 
             <section class="col-md-8">
 
         
 
-            <article>
+            <article itemscope itemtype="https://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <div class="kratos-post-content">
-            <h2 class="title-h2 text-center">好伙伴们</h2>
-            <div class="linkpage">
+            <h2 class="title-h2 text-center" itemprop="name headline">好伙伴们</h2>
+            <div itemprop="articleBody"><div class="linkpage">
     <ul id="friendsList"></ul>
 </div>
 
@@ -168,24 +168,24 @@
     let friendNodes = '';
     while (flist.length > 0) {
         const rndNum = Math.floor(Math.random()*flist.length);
-        friendNodes += `<li><a target="_blank" href="${flist[rndNum].link}"><img src="${flist[rndNum].avatar}" onerror="this.src='/blog/images/avatar.webp'"><h4>${flist[rndNum].name}</h4><p>${flist[rndNum].bio}</p></a></li>`;
+        friendNodes += `<li><a target="_blank" href="${flist[rndNum].link}"><img src="${flist[rndNum].avatar}" onerror="this.src='/blog/images/avatar.webp';this.onerror=null;"><h4>${flist[rndNum].name}</h4><p>${flist[rndNum].bio}</p></a></li>`;
         flist.splice(rndNum, 1);
     }
     document.getElementById("friendsList").innerHTML = friendNodes;
 }
-</script>
+</script></div>
         </div>
         <footer class="kratos-entry-footer clearfix">
             <div class="footer-tag clearfix">
                 <div class="pull-date">
-                <span>最后编辑：2021-01-18</span>
+                    <time datetime="2021-01-18T00:00:00.000Z" itemprop="dateModified">最后编辑：2021-01-18</time>
                 </div>
             </div>
         </footer>
     </div>
     
+    
 </article>
-
 
         
 
@@ -239,7 +239,6 @@
         </a>
     </div>
 </aside>
-
             
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
@@ -256,7 +255,6 @@
         <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
       </div>
   </aside>
-
 
             
                 
@@ -312,11 +310,9 @@
   </div>
   </aside>
 
-
             
     </div>
 </section>
-
         
         </div>
     </div>
@@ -409,7 +405,6 @@
         fixed="true"
     >
     </meting-js>
-
 
 
 

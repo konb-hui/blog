@@ -30,7 +30,6 @@
 <meta property="article:tag" content="springboot">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
-<meta name="twitter:site" content="@null">
   
   <!-- 站点验证相关 -->
   
@@ -50,6 +49,7 @@
   
   <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
   
   
     <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
@@ -151,23 +151,26 @@
                 <div id="main" class="row">
                     
 
-
         
 
             <section class="col-md-8">
 
         
 
-            <article>
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2022/04/12/springboot-detailed-explanation/springboot-detailed-explanation-2/">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center">SpringBoot启动流程的超详细解析（下）</h1>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">SpringBoot启动流程的超详细解析（下）</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><i class="fa fa-calendar"></i> 2022-04-12</li>
-                <li><i class="fa fa-user"></i> 作者 konb</li>
+                <li><time datetime="2022-04-12T02:33:52.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-04-12</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
                 <li>
                     <i class="fa fa-edit"></i> 
                     
@@ -176,17 +179,6 @@
                     
                     字
                 </li>
-                
-                    <li id="/blog/2022/04/12/springboot-detailed-explanation/springboot-detailed-explanation-2/" class="leancloud_visitors" data-flag-title="SpringBoot启动流程的超详细解析（下）">
-                        <i class="fa fa-eye"></i>
-                        <span class="leancloud-visitors-count"> </span> 次阅读
-                    </li>
-                    
-                        <li>
-                            <i class="fa fa-commenting-o"></i>
-                            <span data-xid="/blog/2022/04/12/springboot-detailed-explanation/springboot-detailed-explanation-2/" class="waline-comment-count"> </span> 条评论
-                        </li>
-                    
                 
             </ul>
         </header>
@@ -201,7 +193,7 @@
                 </div>
             
             <hr />
-            <p>继续接着上篇文章讲SpringBoot的启动流程，这篇是真正开始分析启动的完整过程。</p>
+            <div itemprop="articleBody"><p>继续接着上篇文章讲SpringBoot的启动流程，这篇是真正开始分析启动的完整过程。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WjApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(WjApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
@@ -267,11 +259,11 @@
 
 <p>看下<code>configurePropertySources</code>的源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configurePropertySources</span><span class="params">(ConfigurableEnvironment environment, String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//获取当前环境的属性源</span></span><br><span class="line">   MutablePropertySources sources = environment.getPropertySources();</span><br><span class="line">    <span class="comment">//判断this.defaultProperties（初始化为空）是否为空，不为空则加到sources</span></span><br><span class="line">   DefaultPropertiesPropertySource.ifNotEmpty(<span class="keyword">this</span>.defaultProperties, sources::addLast);</span><br><span class="line">    <span class="comment">//判断是否有命令行属性，有的话就增加</span></span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">this</span>.addCommandLineProperties &amp;&amp; args.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      String name = CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME;</span><br><span class="line">      <span class="keyword">if</span> (sources.contains(name)) &#123;</span><br><span class="line">         PropertySource&lt;?&gt; source = sources.get(name);</span><br><span class="line">         CompositePropertySource composite = <span class="keyword">new</span> CompositePropertySource(name);</span><br><span class="line">         composite.addPropertySource(</span><br><span class="line">               <span class="keyword">new</span> SimpleCommandLinePropertySource(<span class="string">&quot;springApplicationCommandLineArgs&quot;</span>, args));</span><br><span class="line">         composite.addPropertySource(source);</span><br><span class="line">         sources.replace(name, composite);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">         sources.addFirst(<span class="keyword">new</span> SimpleCommandLinePropertySource(args));</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+</div>
         </div>
         
             <div class="kratos-copyright text-center clearfix">
-                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
             </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -348,7 +340,6 @@
         };
     </script>
 </div>
-
                 
                 </div>
             
@@ -358,7 +349,7 @@
                     <a class="tag-none-link" href="/blog/tags/spring/" rel="tag">spring</a>, <a class="tag-none-link" href="/blog/tags/springboot/" rel="tag">springboot</a>
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-04-14</span>
+                    <time datetime="2022-04-14T10:24:50.773Z" itemprop="dateModified">最后编辑：2022-04-14</time>
                 </div>
             </div>
         </footer>
@@ -378,28 +369,7 @@
         </nav>
     
     
-        <div id="w-comments" class="post-comments"></div>
-<script>
-    var load_comm = () => {
-        const init = () => {
-            new Waline(Object.assign({
-                el: '#w-comments',
-                path: '/blog/2022/04/12/springboot-detailed-explanation/springboot-detailed-explanation-2/'
-            }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
-        }
-        if (typeof Waline === 'undefined') {
-            const src = 'https://unpkg.com/@waline/client/dist/Waline.min.js';
-            $.getScript(src, init);
-        } else {
-            init();
-        }
-    };
-</script>
-<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
-
-    
 </article>
-
 
         
 
@@ -451,7 +421,6 @@
         </a>
     </div>
 </aside>
-
             
                     <div class="sticky-area">
                 
@@ -460,13 +429,12 @@
     <h4 class="widget-title no-after">
         <i class="fa fa-compass"></i>
         文章目录
-        <span class="toc-progress-bar"></span>
+        <span class="toc-progress-bar" role="progressbar" aria-label="阅读进度："></span>
     </h4>
     <div class="textwidget">
         <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%9B%E5%BB%BASpringApplication%E5%AF%B9%E8%B1%A1"><span class="toc-text">一、创建SpringApplication对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%89%A7%E8%A1%8Crun%E6%96%B9%E6%B3%95"><span class="toc-text">二、执行run方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-text">1.初始化上下文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%8E%B7%E5%8F%96%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">（1）获取类加载器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%8A%A0%E8%BD%BD%E5%85%A8%E9%99%90%E5%AE%9A%E5%90%8D"><span class="toc-text">（2）加载全限定名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BE%8B"><span class="toc-text">（3）创建实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E7%9B%91%E5%90%AC%E5%99%A8"><span class="toc-text">2.执行程序运行监听器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%87%86%E5%A4%87environment"><span class="toc-text">3.准备environment</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E8%8E%B7%E5%8F%96environment"><span class="toc-text">（1）获取environment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E9%85%8D%E7%BD%AEenvironment"><span class="toc-text">（2）配置environment</span></a></li></ol></li></ol></li></ol>
     </div>
 </aside>
-
                 
                 
   <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
@@ -483,7 +451,6 @@
         <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
       </div>
   </aside>
-
 
             
                 
@@ -539,11 +506,9 @@
   </div>
   </aside>
 
-
             
     </div>
 </section>
-
         
         </div>
     </div>
@@ -636,7 +601,6 @@
         fixed="true"
     >
     </meting-js>
-
 
 
 

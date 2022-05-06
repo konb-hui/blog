@@ -28,7 +28,6 @@
 <meta property="article:author" content="konb">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
-<meta name="twitter:site" content="@null">
   
   <!-- 站点验证相关 -->
   
@@ -48,6 +47,7 @@
   
   <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
   <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
   
   
     <link rel="stylesheet" href="https://unpkg.com/aplayer@1.10.1/dist/APlayer.min.css">
@@ -149,23 +149,26 @@
                 <div id="main" class="row">
                     
 
-
         
 
             <section class="col-md-8">
 
         
 
-            <article>
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/">
     <div class="kratos-hentry kratos-post-inner clearfix">
         <header class="kratos-entry-header">
             
-                <h1 class="kratos-entry-title text-center">记一次文件切片上传文件损坏的bug</h1>
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">记一次文件切片上传文件损坏的bug</h1>
             
             
             <ul class="kratos-post-meta text-center">
-                <li><i class="fa fa-calendar"></i> 2021-12-15</li>
-                <li><i class="fa fa-user"></i> 作者 konb</li>
+                <li><time datetime="2021-12-15T07:11:01.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2021-12-15</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
                 <li>
                     <i class="fa fa-edit"></i> 
                     
@@ -174,17 +177,6 @@
                     
                     字
                 </li>
-                
-                    <li id="/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/" class="leancloud_visitors" data-flag-title="记一次文件切片上传文件损坏的bug">
-                        <i class="fa fa-eye"></i>
-                        <span class="leancloud-visitors-count"> </span> 次阅读
-                    </li>
-                    
-                        <li>
-                            <i class="fa fa-commenting-o"></i>
-                            <span data-xid="/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/" class="waline-comment-count"> </span> 条评论
-                        </li>
-                    
                 
             </ul>
         </header>
@@ -195,7 +187,7 @@
             </div>
             
             <hr />
-            <p>今天碰到一个文件损坏的bug。从系统下载之前上传的PDF文件，打开时会提示文件损坏，实际使用浏览器和WPS可以正常打开，使用Adobe Acrobat会提示文件已损坏。下面简单记录下整个bug的解决过程。</p>
+            <div itemprop="articleBody"><p>今天碰到一个文件损坏的bug。从系统下载之前上传的PDF文件，打开时会提示文件损坏，实际使用浏览器和WPS可以正常打开，使用Adobe Acrobat会提示文件已损坏。下面简单记录下整个bug的解决过程。</p>
 <p>产生bug的功能是自己写的文件切片上传，基本过程是从前端将大于2M的文件拆分成数个最大2M的文件，然后将所有切片上传到后端，前端上传完所有切片会发一个消息告诉后端开始将所有切片合成原文件，后端合成完后再将文件的下载地址返回给前端。</p>
 <h3 id="1-首先从服务器上面copy下来上传的文件和原文件对比"><a href="#1-首先从服务器上面copy下来上传的文件和原文件对比" class="headerlink" title="1.首先从服务器上面copy下来上传的文件和原文件对比"></a>1.首先从服务器上面copy下来上传的文件和原文件对比</h3><p>从下图可以看出，上传后的文件的大小比原文件更大了，大了1017个字节，现在需要确认是在前端拆分的时候生成的文件变大了还是在后端文件合成的时候变大了</p>
 <p><img src="/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/1.jpg"></p>
@@ -208,11 +200,11 @@
 
 <p>修改后的代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将上传的文件保存到新文件中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> uploadFile 上传的文件 MultipartFile</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> saveFile 新保存的文件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">copyUploadFile</span><span class="params">(MultipartFile uploadFile, File saveFile)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">   <span class="keyword">try</span>(InputStream inputStream = uploadFile.getInputStream();</span><br><span class="line">      BufferedInputStream bufferedInputStream = <span class="keyword">new</span> BufferedInputStream(inputStream);</span><br><span class="line">      OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(saveFile);</span><br><span class="line">      BufferedOutputStream bufferedOutputStream = <span class="keyword">new</span> BufferedOutputStream(outputStream)) &#123;</span><br><span class="line">      <span class="keyword">int</span> len = -<span class="number">1</span>;</span><br><span class="line">      <span class="keyword">while</span> ((len = bufferedInputStream.read(data)) != -<span class="number">1</span>) &#123;</span><br><span class="line">          <span class="comment">//只写新读取到的字节数，不把1024个字节都写进去</span></span><br><span class="line">         bufferedOutputStream.write(data, <span class="number">0</span>, len);</span><br><span class="line">         bufferedOutputStream.flush();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> SrsException(<span class="number">300</span>, <span class="string">&quot;文件读取失败&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+</div>
         </div>
         
             <div class="kratos-copyright text-center clearfix">
-                <h5>本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
             </div>
         
         <footer class="kratos-entry-footer clearfix">
@@ -289,7 +281,6 @@
         };
     </script>
 </div>
-
                 
                 </div>
             
@@ -299,7 +290,7 @@
                     
                 </div>
                 <div class="pull-date">
-                <span>最后编辑：2022-03-24</span>
+                    <time datetime="2022-03-24T07:37:41.194Z" itemprop="dateModified">最后编辑：2022-03-24</time>
                 </div>
             </div>
         </footer>
@@ -319,28 +310,7 @@
         </nav>
     
     
-        <div id="w-comments" class="post-comments"></div>
-<script>
-    var load_comm = () => {
-        const init = () => {
-            new Waline(Object.assign({
-                el: '#w-comments',
-                path: '/blog/2021/12/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%96%87%E4%BB%B6%E5%88%87%E7%89%87%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E6%8D%9F%E5%9D%8F%E7%9A%84bug/'
-            }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
-        }
-        if (typeof Waline === 'undefined') {
-            const src = 'https://unpkg.com/@waline/client/dist/Waline.min.js';
-            $.getScript(src, init);
-        } else {
-            init();
-        }
-    };
-</script>
-<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
-
-    
 </article>
-
 
         
 
@@ -392,7 +362,6 @@
         </a>
     </div>
 </aside>
-
             
                     <div class="sticky-area">
                 
@@ -411,7 +380,6 @@
         <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
       </div>
   </aside>
-
 
             
                 
@@ -467,11 +435,9 @@
   </div>
   </aside>
 
-
             
     </div>
 </section>
-
         
         </div>
     </div>
@@ -564,7 +530,6 @@
         fixed="true"
     >
     </meting-js>
-
 
 
 
