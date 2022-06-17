@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="/blog/images/avatar.webp">
+  <title>常用字符串匹配算法 | konb的博客</title>
+  <meta name="author" content="konb" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <script src="https://konb-hui.github.io/blog/waifu/autoload.js"></script>
+  
+    <meta name="keywords" content="字符串匹配算法" />
+  
+  <meta name="description" content="因为一直来说没有去手写过这些排序算法，只是了解原理，所以将一些常用的算法自己手写了一遍，并且详细注释了每一步的作用，还做了下简单的速度对比。目前有：冒泡排序、选择排序、插入排序、希尔排序、快速排序、归并排序、堆排序，后续会考虑更新些不常用的排序。 字符串匹配算法也是一个比较常用的算法，因此准备把相关的算法都先了解下其思想，然后再完全用自己的代码实现，同时写一个简单的main方法用来测试每一种算法消">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用字符串匹配算法">
+<meta property="og:url" content="https://konb-hui.github.io/blog/2022/06/17/string-match-algorithms/index.html">
+<meta property="og:site_name" content="konb的博客">
+<meta property="og:description" content="因为一直来说没有去手写过这些排序算法，只是了解原理，所以将一些常用的算法自己手写了一遍，并且详细注释了每一步的作用，还做了下简单的速度对比。目前有：冒泡排序、选择排序、插入排序、希尔排序、快速排序、归并排序、堆排序，后续会考虑更新些不常用的排序。 字符串匹配算法也是一个比较常用的算法，因此准备把相关的算法都先了解下其思想，然后再完全用自己的代码实现，同时写一个简单的main方法用来测试每一种算法消">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
+<meta property="article:published_time" content="2022-06-17T09:30:00.000Z">
+<meta property="article:modified_time" content="2022-06-17T09:39:55.219Z">
+<meta property="article:author" content="konb">
+<meta property="article:tag" content="字符串匹配算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/blog/css/kratosr.min.css" type="text/css" media="all">
+  
+    <link rel="stylesheet" id="darkmode-css" href="/blog/css/kr-color-dark.min.css" type="text/css" media="(prefers-color-scheme: dark)">
+    <script src="/blog/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/blog/css/highlight/night-eighties.min.css" type="text/css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
+  
+  
+  
+    <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="https://unpkg.com/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/blog/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/blog/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                        <li><a href="/blog/"><i class="fa fa-home"></i>首页</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/blog/archives/"><i class="fa fa-file"></i>档案馆</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/blog/friends/"><i class="fa fa-paw"></i>好伙伴</a></li>
+                                    
+                                
+                                    
+                                        <li>
+                                            <a><i class="fa fa-link"></i>链接</a>
+                                            <ul class="sub-menu">
+                                                
+                                                    
+                                                
+                                                    
+                                                        <li><a target="_blank" rel="noopener" href="https://github.com/Candinya/Kratos-Rebirth">主题链接</a></li>
+                                                    
+                                                
+                                            </ul>
+                                        </li>
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/blog/">konb的博客</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/blog/">
+                        <h2>konb的博客</h2> <br />
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2022/06/17/string-match-algorithms/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">常用字符串匹配算法</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2022-06-17T09:30:00.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2022-06-17</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        ~13.48K
+                    
+                    字
+                </li>
+                
+                    <li id="/blog/2022/06/17/string-match-algorithms/" class="leancloud_visitors" data-flag-title="常用字符串匹配算法">
+                        <i class="fa fa-eye"></i>
+                        <span class="leancloud-visitors-count"> </span> 次阅读
+                    </li>
+                    
+                        <li>
+                            <i class="fa fa-commenting-o"></i>
+                            <span data-xid="/blog/2022/06/17/string-match-algorithms/" class="waline-comment-count"> </span> 条评论
+                        </li>
+                    
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1655458795219"></time> 前，其中的内容可能需要更新。</p></div>
+            </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>因为一直来说没有去手写过这些排序算法，只是了解原理，所以将一些常用的算法自己手写了一遍，并且详细注释了每一步的作用，还做了下简单的速度对比。目前有：冒泡排序、选择排序、插入排序、希尔排序、快速排序、归并排序、堆排序，后续会考虑更新些不常用的排序。</p>
+<p>字符串匹配算法也是一个比较常用的算法，因此准备把相关的算法都先了解下其思想，然后再完全用自己的代码实现，同时写一个简单的main方法用来测试每一种算法消耗的时间，提供一个简单的参考。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.konb.algorithm.str.match;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> konb</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022-06-14 9:41</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringMatch</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 暴力破解法 BF</span></span><br><span class="line"><span class="comment">     * 时间复杂度 O(mn)</span></span><br><span class="line"><span class="comment">     * 空间复杂度 O(m + N)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bruteForce</span><span class="params">(String target, String pattern)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> targetLength = target.length();</span><br><span class="line">        <span class="keyword">int</span> patternLength = pattern.length();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (targetLength &lt; patternLength || targetLength &lt; <span class="number">1</span> || patternLength &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[] targetArray = target.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] patternArray = pattern.toCharArray();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (targetArray[i] != patternArray[j]) &#123;</span><br><span class="line">                <span class="comment">//优化项：如果剩余长度小于匹配字符串长度，直接返回</span></span><br><span class="line">                <span class="keyword">if</span> (targetLength - i &lt;= patternLength) &#123;</span><br><span class="line">                    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (! flag) &#123;</span><br><span class="line">                    i ++;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    flag = <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                j = <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                flag = <span class="keyword">true</span>;</span><br><span class="line">                i ++;</span><br><span class="line">                j ++;</span><br><span class="line">                <span class="keyword">if</span> (j == patternLength) &#123;</span><br><span class="line">                    <span class="keyword">return</span> i - patternLength;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (i &gt;= targetLength) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Rabin-Karp算法 RK 拆分成多个和匹配字符串长度相同的子字符串，再计算hash值，hash值一致再匹配</span></span><br><span class="line"><span class="comment">     * 速度反而比暴力还慢，时间应该都花在substring上了,应该需要想其他方法替代substring</span></span><br><span class="line"><span class="comment">     * 也可能是我写的不对</span></span><br><span class="line"><span class="comment">     * 时间复杂度 O(mn)</span></span><br><span class="line"><span class="comment">     * 空间复杂度 O(m + n)</span></span><br><span class="line"><span class="comment">     * 耗时：RK&gt;BF</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">rabinKrap</span><span class="params">(String target, String pattern)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> targetLength = target.length();</span><br><span class="line">        <span class="keyword">int</span> patternLength = pattern.length();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (targetLength &lt; patternLength || targetLength &lt; <span class="number">1</span> || patternLength &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> patternHashCode = pattern.hashCode();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (target.hashCode() == patternHashCode) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = patternLength;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (j &lt;= targetLength) &#123;</span><br><span class="line">            String temp = target.substring(i, j);</span><br><span class="line">            <span class="keyword">int</span> hash = temp.hashCode();</span><br><span class="line">            <span class="keyword">if</span> (hash == patternHashCode &amp;&amp; pattern.equals(temp)) &#123;</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">            i ++;</span><br><span class="line">            j ++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断两个字符串是否相同，相当于equals</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> str1 字符串1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> str2 字符串2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 匹配结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">compareTwoIsometricArray</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] a = str1.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] b = str2.toCharArray();</span><br><span class="line">        <span class="keyword">int</span> length1 = a.length;</span><br><span class="line">        <span class="keyword">int</span> length2 = b.length;</span><br><span class="line">        <span class="keyword">if</span> (length1 != length2) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length1; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[i] != b[i]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">compareTwoIsometricArray</span><span class="params">(<span class="keyword">char</span>[] a, <span class="keyword">char</span>[] b, <span class="keyword">int</span> start1, <span class="keyword">int</span> end1, <span class="keyword">int</span> start2, <span class="keyword">int</span> end2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> length1 = end1 - start1 + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> length2 = end2 - start2 + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (length1 != length2) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (start1 &lt;= end1) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[start1 ++] != b[start2 ++]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Boyer-Moore字符串搜索算法 BM</span></span><br><span class="line"><span class="comment">     * 该算法是从右到左对比字符，若不等，通过最坏字符规则和最好后缀规则确定需要移动的最大位数</span></span><br><span class="line"><span class="comment">     * 最坏是O(mn)，最好是O(n/m)</span></span><br><span class="line"><span class="comment">     * 空间复杂度是O(M）</span></span><br><span class="line"><span class="comment">     * 耗时：KR&gt;BF&gt;BM,一般文档的Ctrl+F是使用这种算法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">boyerMoore</span><span class="params">(String target, String pattern)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[] a = target.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] b = pattern.toCharArray();</span><br><span class="line"></span><br><span class="line">        goodSuffixInit(b);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> length1 = a.length;</span><br><span class="line">        <span class="keyword">int</span> length2 = b.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = length2 - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> j = i;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i &lt; length1) &#123;</span><br><span class="line">            <span class="comment">//字符匹配，位置-1，若匹配字符串的位置-1后小于0则匹配完成，返回结果</span></span><br><span class="line">            <span class="keyword">if</span> (a[i] == b[j]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (-- j &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> i;</span><br><span class="line">                &#125;</span><br><span class="line">                -- i;</span><br><span class="line">                <span class="comment">//字符不匹配</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//获取不匹配字符在匹配字符串的位置</span></span><br><span class="line">                <span class="keyword">int</span> moveNum = Math.max(badCharacterMoveNum(b, a[i], j), goodSuffixMoveNum(b, j + <span class="number">1</span>));</span><br><span class="line">                <span class="comment">//获取移动后pattern最左边的位置</span></span><br><span class="line">                k += moveNum;</span><br><span class="line">                <span class="comment">//获取移动后pattern最右边的位置</span></span><br><span class="line">                i = k + length2 - <span class="number">1</span>;</span><br><span class="line">                <span class="comment">//j初始化为开始值，重新开始匹配</span></span><br><span class="line">                j = length2 - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前字符在当前字符串通过坏字符规则需要移动的位数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> p 字符串</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> c 字符</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 字符所在字符串最右位置</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">badCharacterMoveNum</span><span class="params">(<span class="keyword">char</span>[] p, <span class="keyword">char</span> c, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = index - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i --) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p[i] == c) &#123;</span><br><span class="line">                a = i;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> index - a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 好后缀规则数组，初始化所有后缀对应的重复部分的下标</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span>[] isMatch;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化好后缀规则数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pattern 目标字符串</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">goodSuffixInit</span><span class="params">(<span class="keyword">char</span>[] pattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> length = pattern.length;</span><br><span class="line">        <span class="keyword">int</span> half = length / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> maxIndex = length - <span class="number">1</span>;</span><br><span class="line">        isMatch = <span class="keyword">new</span> <span class="keyword">int</span>[half];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = maxIndex; i &gt;= length - half; i --) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = half - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j -= length - i) &#123;</span><br><span class="line">                <span class="keyword">int</span> inc = maxIndex - i;</span><br><span class="line">                <span class="keyword">if</span> (compareTwoIsometricArray(pattern, pattern, i, maxIndex, j, j + inc)) &#123;</span><br><span class="line">                    isMatch[maxIndex - i] = j + <span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取字符串好后缀能移动的位数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> p 目标字符串</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> index 好后缀首个字符下标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 移动位数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">goodSuffixMoveNum</span><span class="params">(<span class="keyword">char</span>[] p, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (index &gt;= p.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (index &lt; p.length - (p.length / <span class="number">2</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> isMatch[isMatch.length - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> num = isMatch[p.length - <span class="number">1</span> - index];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (num == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> p.length;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> index - num + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Sunday算法</span></span><br><span class="line"><span class="comment">     * 时间复杂度，最差O(MN),最好O(N)</span></span><br><span class="line"><span class="comment">     * 空间复杂度O(1)</span></span><br><span class="line"><span class="comment">     * 耗时：RK&gt;BF&gt;BM&gt;Sunday</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sunday</span><span class="params">(String target, String pattern)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[] a = target.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] b = pattern.toCharArray();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> length1 = a.length;</span><br><span class="line">        <span class="keyword">int</span> length2 = b.length;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> k = i;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; length1) &#123;</span><br><span class="line">            <span class="comment">//字符匹配，则下标分别往后移动一位</span></span><br><span class="line">            <span class="keyword">if</span> (a[i] == b[j]) &#123;</span><br><span class="line">                <span class="comment">//移位后超出pattern长度，说明匹配成功，返回结果</span></span><br><span class="line">                <span class="keyword">if</span> (++ j &gt;= length2) &#123;</span><br><span class="line">                    <span class="keyword">return</span> k;</span><br><span class="line">                &#125;</span><br><span class="line">                ++ i;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//不匹配获取当前匹配中的字符的下一位字符的下标</span></span><br><span class="line">                <span class="keyword">int</span> indexA = k + length2;</span><br><span class="line">                <span class="comment">//超出target的长度，说明匹配失败，直接返回target匹配的起始位置</span></span><br><span class="line">                <span class="keyword">if</span> (indexA &gt;= length1) &#123;</span><br><span class="line">                    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//获取target需要往后移动的位数</span></span><br><span class="line">                <span class="keyword">int</span> moveNum = length2 - indexOf(b, a[indexA]);</span><br><span class="line">                <span class="comment">//更新target起始位置</span></span><br><span class="line">                k += moveNum;</span><br><span class="line">                i = k;</span><br><span class="line">                j = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">char</span>[] pattern, <span class="keyword">char</span> a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = pattern.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i --) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pattern[i] == a) &#123;</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * KMP算法</span></span><br><span class="line"><span class="comment">     * 很复杂</span></span><br><span class="line"><span class="comment">     * 时间复杂度O(N) 但实际速度并没有非常好，只比RK好</span></span><br><span class="line"><span class="comment">     * 空间复杂度O(M)</span></span><br><span class="line"><span class="comment">     * 耗时：RK&gt;KMP&gt;BF&gt;BM&gt;Sunday</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">kmp</span><span class="params">(String target, String pattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] a = target.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] b = pattern.toCharArray();</span><br><span class="line">        <span class="keyword">int</span> length1 = a.length;</span><br><span class="line">        <span class="keyword">int</span> length2 = b.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] next = initMatchTable(b);</span><br><span class="line">        <span class="keyword">while</span> (i &lt; length1 &amp;&amp; j &lt; length2) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当j为-1时，要移动的是i，当然j也要归0</span></span><br><span class="line">            <span class="keyword">if</span> (j == -<span class="number">1</span> || a[i] == b[j]) &#123;</span><br><span class="line"></span><br><span class="line">                i++;</span><br><span class="line"></span><br><span class="line">                j++;</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// i不需要回溯了</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// i = i - j + 1;</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// j回到指定位置</span></span><br><span class="line"></span><br><span class="line">                j = next[j];</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (j == length2) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> i - j;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span>[] initMatchTable(<span class="keyword">char</span>[] pattern) &#123;</span><br><span class="line">        <span class="keyword">int</span> length = pattern.length;</span><br><span class="line">        <span class="keyword">int</span>[] next = <span class="keyword">new</span> <span class="keyword">int</span>[length];</span><br><span class="line"></span><br><span class="line">        next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> k = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (j &lt; length - <span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (k == -<span class="number">1</span> || pattern[j] == pattern[k]) &#123;</span><br><span class="line"></span><br><span class="line">                next[++j] = ++k;</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">                k = next[k];</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i1 = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (i1 == -<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//随机生成长度为1千万的目标字符串</span></span><br><span class="line">            String target = getRandomStr(<span class="number">10000000</span>);</span><br><span class="line">            <span class="comment">//随机生成长度为5的匹配字符串</span></span><br><span class="line">            String pattern = getRandomStr(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//            System.out.println(target);</span></span><br><span class="line"><span class="comment">//            System.out.println(pattern);</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> time1 = System.currentTimeMillis();</span><br><span class="line">            i1 = bruteForce(target, pattern);</span><br><span class="line">            <span class="keyword">long</span> time2 = System.currentTimeMillis();</span><br><span class="line">            System.out.println(<span class="string">&quot;暴力破解法：位置：&quot;</span> + i1 + <span class="string">&quot; 耗时：&quot;</span> + (time2 - time1) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> time3 = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">int</span> i2 = rabinKrap(target, pattern);</span><br><span class="line">            <span class="keyword">long</span> time4 = System.currentTimeMillis();</span><br><span class="line">            System.out.println(<span class="string">&quot;Rabin-Karp法：位置：&quot;</span> + i2 + <span class="string">&quot; 耗时：&quot;</span> + (time4 - time3) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> time5 = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">int</span> i3 = boyerMoore(target, pattern);</span><br><span class="line">            <span class="keyword">long</span> time6 = System.currentTimeMillis();</span><br><span class="line">            System.out.println(<span class="string">&quot;Boyer-Moore法：位置：&quot;</span> + i3 + <span class="string">&quot; 耗时：&quot;</span> + (time6 - time5) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> time7 = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">int</span> i4 = sunday(target, pattern);</span><br><span class="line">            <span class="keyword">long</span> time8 = System.currentTimeMillis();</span><br><span class="line">            System.out.println(<span class="string">&quot;Sunday算法：位置：&quot;</span> + i4 + <span class="string">&quot; 耗时：&quot;</span> + (time8 - time7) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> time9 = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">int</span> i5 = kmp(target, pattern);</span><br><span class="line">            <span class="keyword">long</span> time10 = System.currentTimeMillis();</span><br><span class="line">            System.out.println(<span class="string">&quot;kmp算法：位置：&quot;</span> + i5 + <span class="string">&quot; 耗时：&quot;</span> + (time10 - time9) + <span class="string">&quot;毫秒&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + ++count + <span class="string">&quot;次&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;===========================================&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getRandomStr</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;</span>;</span><br><span class="line">        <span class="comment">//创建random对象</span></span><br><span class="line">        Random r = <span class="keyword">new</span> Random();</span><br><span class="line">        StringBuilder stringBuffer = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="comment">//使用random生成[0,62)之间的随机数,不包括62</span></span><br><span class="line">            <span class="keyword">int</span> it = r.nextInt(<span class="number">62</span>);</span><br><span class="line">            <span class="comment">// 把int下标 转为 str中随机字符(数字，大写字母或者小写字母)</span></span><br><span class="line">            stringBuffer.append(str.charAt(it));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> stringBuffer.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> 分享</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://konb-hui.github.io/blog/2022/06/17/string-match-algorithms/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://konb-hui.github.io/blog/2022/06/17/string-match-algorithms/";
+            const title         = "「常用字符串匹配算法」";
+            const excerpt       = `因为一直来说没有去手写过这些排序算法，只是了解原理，所以将一些常用的算法自己手写了一遍，并且详细注释了每一步的作用，还做了下简单的速度对比。目前有：冒泡排序、选择排序、插入排序、希尔排序、快速排序、归并排序、堆排序，后续会考虑更新些不...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/blog/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" rel="tag">字符串匹配算法</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2022-06-17T09:39:55.219Z" itemprop="dateModified">最后编辑：2022-06-17</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 常用排序算法" href="/blog/2022/05/06/common-sort-algorithms/">&lt; 上一篇</a>
+            </div>
+            
+            
+        </nav>
+    
+    
+        <div id="w-comments" class="post-comments bg-image"></div>
+<script>
+    var load_comm = () => {
+        const init = () => {
+            new Waline(Object.assign({
+                el: '#w-comments',
+                path: '/blog/2022/06/17/string-match-algorithms/'
+            }, JSON.parse('{"serverURL":"https://waline-konb-l9gc4tkyy-konb-hui.vercel.app/","visitor":true}')));
+        }
+        if (typeof Waline === 'undefined') {
+            const src = 'https://unpkg.com/@waline/client@1/dist/Waline.min.js';
+            $.getScript(src, init);
+        } else {
+            init();
+        }
+    };
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
+
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/blog/images/avatar.webp" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center"></p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/blog/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                12
+            </span>
+        </a>
+        <a class="meta-item" href="/blog/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+        <a class="meta-item" href="/blog/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                5
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/">成神之路</a><span class="category-list-count">8</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/">代码记录</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/">支线任务</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/Rank-D/">Rank D</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/Rank-E/">Rank E</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E4%BA%8B%E4%BB%B6/">神秘事件</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E5%AE%9D%E8%97%8F/">神秘宝藏</a><span class="category-list-count">1</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.8em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.7em;">springboot</a> <a href="/blog/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">字符串匹配算法</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/blog/2022/06/17/string-match-algorithms/"><i class="fa  fa-book"></i> 常用字符串匹配算法</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2022/05/06/common-sort-algorithms/"><i class="fa  fa-book"></i> 常用排序算法</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2022/04/12/springboot-detailed-explanation/springboot-detailed-explanation-2/"><i class="fa  fa-book"></i> SpringBoot启动流程的超详细解析（下）</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2022/04/06/springboot-detailed-explanation/springboot-detailed-explanation-1/"><i class="fa  fa-book"></i> SpringBoot启动流程的超详细解析（上）</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2022/03/25/side-quest/2/static-method-use-bean-20220325/"><i class="fa  fa-book"></i> 静态方法中使用spring管理的bean</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:konbhui23@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/konb-hui"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2022 konb的博客 版权所有.</li>
+                            <li>本站已运行<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by konb.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/blog/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="https://unpkg.com/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/blog/";
+</script>
+
+
+    <script async src="/blog/js/candy.min.js"></script>
+
+
+
+
+    <script defer src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="https://unpkg.com/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/blog/js/kratosr.min.js"></script>
+<script defer src="/blog/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
