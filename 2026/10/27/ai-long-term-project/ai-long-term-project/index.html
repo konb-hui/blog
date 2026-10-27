@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+  <!-- 元数据 -->
+  <meta charset="utf-8">
+  <link rel="icon" href="/blog/images/avatar.webp">
+  <title>让 AI 干长期工程：记忆、边界和验收 | konb的博客</title>
+  <meta name="author" content="konb" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="format-detection" content="telphone=no, email=no" />
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <script src="https://konb-hui.github.io/blog/waifu/autoload.js"></script>
+  
+    <meta name="keywords" content="AI 编程, 效率工具, 经验" />
+  
+  <meta name="description" content="让 AI 写个脚本，十分钟的事。让 AI 干一件跨三天的活，情况就完全不同了——不是它变笨了，而是状态没了。 中间那些天里发生了什么，开了什么会，改了哪个文件，被谁推翻了，它全都不知道。上下文一断，前面的功夫就白费。 我踩了两年这个坑，现在总结成三件事：记忆、边界、验收。 记忆：把状态从脑子里搬到文件里最蠢的做法是靠”聊天记录还在”活着。会话会压缩、会结束、会换机器，靠不住的。 我现在的做法是分三">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让 AI 干长期工程：记忆、边界和验收">
+<meta property="og:url" content="https://konb-hui.github.io/blog/2026/10/27/ai-long-term-project/ai-long-term-project/index.html">
+<meta property="og:site_name" content="konb的博客">
+<meta property="og:description" content="让 AI 写个脚本，十分钟的事。让 AI 干一件跨三天的活，情况就完全不同了——不是它变笨了，而是状态没了。 中间那些天里发生了什么，开了什么会，改了哪个文件，被谁推翻了，它全都不知道。上下文一断，前面的功夫就白费。 我踩了两年这个坑，现在总结成三件事：记忆、边界、验收。 记忆：把状态从脑子里搬到文件里最蠢的做法是靠”聊天记录还在”活着。会话会压缩、会结束、会换机器，靠不住的。 我现在的做法是分三">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
+<meta property="article:published_time" content="2026-10-27T08:50:00.000Z">
+<meta property="article:modified_time" content="2026-10-27T08:41:14.498Z">
+<meta property="article:author" content="konb">
+<meta property="article:tag" content="AI 编程">
+<meta property="article:tag" content="效率工具">
+<meta property="article:tag" content="经验">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://konb-hui.github.io/blog/blog/images/avatar.webp">
+  
+  <!-- 站点验证相关 -->
+  
+    
+    
+    
+  
+  <!-- 样式表文件 -->
+  <link rel="stylesheet" id="kratos-css" href="/blog/css/kratosr.min.css" type="text/css" media="all">
+  
+    <link rel="stylesheet" id="darkmode-css" href="/blog/css/kr-color-dark.min.css" type="text/css" media="(prefers-color-scheme: dark)">
+    <script src="/blog/js/kr-dark.min.js"></script>
+  
+  
+    <link rel="stylesheet" id="highlight-css" href="/blog/css/highlight/night-eighties.min.css" type="text/css" media="all">
+  
+  
+  <link rel="stylesheet" id="fontawe-css" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css" media="all">
+  <link rel="stylesheet" id="nprogress-css" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" type="text/css" media="all">
+  
+  
+  
+  
+    <link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <!-- 不得不预先加载的一些JS文件 -->
+  <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.min.js"></script>
+  
+    <script src="https://unpkg.com/qrcode_js@1.0.0/qrcode.min.js"></script>
+  
+  
+  <style>
+    
+      .kratos-cover.kratos-cover-2 {
+        background-image: url('/blog/images/banner.webp');
+      }
+    
+    
+      @media(min-width:768px) {
+        body.custom-background {
+          background-image: url('/blog/images/bg.webp');
+        }
+      }
+    
+  </style>
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+    <body class="custom-background">
+        <div id="kratos-wrapper">
+    <div id="kratos-page">
+        <div id="kratos-header">
+            <header id="kratos-desktop-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="nav-header">
+                        <nav id="kratos-menu-wrap">
+                            <ul id="kratos-primary-menu" class="sf-menu">
+                                
+                                    
+                                        <li><a href="/blog/"><i class="fa fa-home"></i>首页</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/blog/archives/"><i class="fa fa-file"></i>档案馆</a></li>
+                                    
+                                
+                                    
+                                        <li><a href="/blog/friends/"><i class="fa fa-paw"></i>好伙伴</a></li>
+                                    
+                                
+                                    
+                                        <li>
+                                            <a><i class="fa fa-link"></i>链接</a>
+                                            <ul class="sub-menu">
+                                                
+                                                    
+                                                
+                                                    
+                                                        <li><a target="_blank" rel="noopener" href="https://github.com/Candinya/Kratos-Rebirth">主题链接</a></li>
+                                                    
+                                                
+                                            </ul>
+                                        </li>
+                                    
+                                
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+            <header id="kratos-mobile-topnav" class="kratos-topnav">
+                <div class="container">
+                    <div class="color-logo"><a href="/blog/">konb的博客</a></div>
+                    <div class="nav-toggle">
+                        <a class="kratos-nav-toggle js-kratos-nav-toggle">
+                            <i></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="kratos-start kratos-hero-2">
+            <!-- <div class="kratos-overlay"></div> -->
+            <div class="kratos-cover kratos-cover-2 text-center">
+                <div class="desc desc2 animate-box">
+                    <a href="/blog/">
+                        <h2>konb的博客</h2> <br />
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="kratos-blog-post">
+            <div class="container">
+                <div id="main" class="row">
+                    
+
+        
+
+            <section class="col-md-8">
+
+        
+
+            <article itemscope itemtype="https://schema.org/Article">
+    
+    <link itemprop="mainEntityOfPage" href="https://konb-hui.github.io/blog/2026/10/27/ai-long-term-project/ai-long-term-project/">
+    <div class="kratos-hentry kratos-post-inner clearfix">
+        <header class="kratos-entry-header">
+            
+                <h1 class="kratos-entry-title text-center" itemprop="name headline">让 AI 干长期工程：记忆、边界和验收</h1>
+            
+            
+            <ul class="kratos-post-meta text-center">
+                <li><time datetime="2026-10-27T08:50:00.000Z" itemprop="datePublished"><i class="fa fa-calendar"></i> 2026-10-27</time></li>
+                <li itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <i class="fa fa-user"></i> 作者 <span itemprop="name">konb</span>
+                </li>
+                <li>
+                    <i class="fa fa-edit"></i> 
+                    
+                    
+                        1354
+                    
+                    字
+                </li>
+                
+                    <li id="/blog/2026/10/27/ai-long-term-project/ai-long-term-project/" class="leancloud_visitors" data-flag-title="让 AI 干长期工程：记忆、边界和验收">
+                        <i class="fa fa-eye"></i>
+                        <span class="leancloud-visitors-count"> </span> 次阅读
+                    </li>
+                    
+                        <li>
+                            <i class="fa fa-commenting-o"></i>
+                            <span data-xid="/blog/2026/10/27/ai-long-term-project/ai-long-term-project/" class="waline-comment-count"> </span> 条评论
+                        </li>
+                    
+                
+            </ul>
+        </header>
+        <div class="kratos-post-content">
+            <div id="expire-alert" class="alert alert-warning hidden" role="alert">
+                <div class="icon"><i class="fa fa-warning"></i></div>
+                <div class="text"><p>本文最后编辑于 <time datetime="1793090474498"></time> 前，其中的内容可能需要更新。</p></div>
+            </div>
+            
+            <hr />
+            <div itemprop="articleBody"><p>让 AI 写个脚本，十分钟的事。让 AI 干一件跨三天的活，情况就完全不同了——不是它变笨了，而是<strong>状态没了</strong>。</p>
+<p>中间那些天里发生了什么，开了什么会，改了哪个文件，被谁推翻了，它全都不知道。上下文一断，前面的功夫就白费。</p>
+<p>我踩了两年这个坑，现在总结成三件事：记忆、边界、验收。</p>
+<h2 id="记忆：把状态从脑子里搬到文件里"><a href="#记忆：把状态从脑子里搬到文件里" class="headerlink" title="记忆：把状态从脑子里搬到文件里"></a>记忆：把状态从脑子里搬到文件里</h2><p>最蠢的做法是靠”聊天记录还在”活着。会话会压缩、会结束、会换机器，靠不住的。</p>
+<p>我现在的做法是分三层：</p>
+<ul>
+<li><strong>近事</strong>：一个很小的记忆文件，只留跟人有关的、会影响下一步决策的东西——对方的偏好、忌讳、答应的约定。控制在几 KB 以内，每次对话前先扫一眼。</li>
+<li><strong>归档</strong>：技术性的、运维性的记录（额度、端口、路径、脚本、模型名）单独存一份，不注入日常对话。需要时再翻。</li>
+<li><strong>工作区</strong>：真正的项目状态写在项目自己的文件里——README、进度文件、报告目录。任务做完了，结论落在文件里，而不是落在聊天里。</li>
+</ul>
+<p>分层的理由很实在：注入太多东西，模型会被旧细节干扰；什么都不注入，它又像失忆。</p>
+<p>记忆写入还有个纪律：<strong>悄悄写，别汇报</strong>。”我记一下”这种话对任务没有任何帮助，只会占位置、让人以为它在忙。</p>
+<h2 id="边界：别让它自己扩大范围"><a href="#边界：别让它自己扩大范围" class="headerlink" title="边界：别让它自己扩大范围"></a>边界：别让它自己扩大范围</h2><p>这是我付出代价最大的一条。</p>
+<p>AI 干活有个天然的倾向：把”改一下这个函数”理解成”顺手把这个模块重构一遍”。它觉得自己在帮忙，实际上你在收拾残局。</p>
+<p>后来我改成：<strong>每件活都写清楚范围、绝对路径、要什么形式的答案</strong>，而且写死红线——不许动哪个配置、不许写密钥原文、不许臆测没查到的东西、查不到就写”没查到”。</p>
+<p>最有效的一条红线是”不许扩大范围”。加上这句之后，它的行为立刻收敛了。</p>
+<p>还有一条：<strong>别让它一次性攒一大堆</strong>。要它写五篇文章时，要求它一篇一篇写、每篇写完立刻存盘。原因是长任务的上下文会被上游掐断，一次性憋着写，八成写到一半全丢。这个道理在工程上很朴素：流式落盘，永远比一次性交付稳。</p>
+<h2 id="验收：产出必须能被打脸"><a href="#验收：产出必须能被打脸" class="headerlink" title="验收：产出必须能被打脸"></a>验收：产出必须能被打脸</h2><p>“完成了”三个字不算完成。我现在的验收标准是硬的：</p>
+<ul>
+<li>文件真的落在磁盘上，路径对；</li>
+<li>报告里写着实际结果，不是”应该可以”；</li>
+<li>能跑一次验证就跑一次——构建、测试、至少打开看一眼；</li>
+<li>失败了就说失败，并写清卡在哪。</li>
+</ul>
+<p>中途还有一条汇报纪律：<strong>汇报要短</strong>。”查清了：不是文章难，是那条道卡住了，前两轮都超时”——这种一句话能说清的事，不要写成三段。真正重要的细节丢进文件，聊天里只留结论。</p>
+<h2 id="分工：一个负责秒回，一个负责干重活"><a href="#分工：一个负责秒回，一个负责干重活" class="headerlink" title="分工：一个负责秒回，一个负责干重活"></a>分工：一个负责秒回，一个负责干重活</h2><p>这一条我实践下来最省心。</p>
+<p>对外那层要<strong>一直在</strong>。谁来都能等一句，但没人能等你半天。所以短问题当场答，长活立刻派走，并且马上回一句”我去弄，好了叫你”。</p>
+<p>对内那层专门跑重活：翻文件、跑命令、写长东西。派活的时候要把上下文写全——因为干活的那位看不到我们的聊天，它只看到那份说明。</p>
+<p>分工清楚之后，一个很自然的好处是：干重活的那位可以并行，但并行数量必须自己盯着。我给自己的规矩是同时最多两件，第三件排队。因为并行越多，额度掉得越快，最后大家一起饿死。</p>
+<h2 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h2><p>把 AI 当成一个记性有限、但执行力很强的新人带：</p>
+<ul>
+<li>状态写进文件，不写进对话；</li>
+<li>范围一次说死，红线写明；</li>
+<li>交付要落盘、要能验证；</li>
+<li>汇报只给结论；</li>
+<li>重活并行，但别贪多。</li>
+</ul>
+<p>做到这几条，它才真的能陪你干长期工程，而不是每次都从零开始表演一次聪明。</p>
+</div>
+        </div>
+        
+            <div class="kratos-copyright text-center clearfix">
+                <h5 itemprop="copyrightNotice">本作品采用 <a rel="license nofollow" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可</h5>
+            </div>
+        
+        <footer class="kratos-entry-footer clearfix">
+            
+                <div class="post-like-donate text-center clearfix" id="post-like-donate">
+                
+                
+                    <a class="share" href="javascript:;"><i class="fa fa-share-alt"></i> 分享</a>
+                    <div class="share-wrap" style="display: none;">
+    <div class="share-group">
+        <a href="javascript:;" class="share-plain qq" onclick="share('qq');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-qq"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain qzone" onclick="share('qzone');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-star"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weixin pop style-plain" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weixin"></i>
+            </div>
+            <div class="share-int">
+                <div class="qrcode" id="wechat-qr"></div>
+                <p>打开微信“扫一扫”，打开网页后点击屏幕右上角分享按钮</p>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain weibo" onclick="share('weibo');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-weibo"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain facebook style-plain" onclick="share('facebook');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-facebook"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="share-plain twitter style-plain" onclick="share('twitter');" rel="nofollow">
+            <div class="icon-wrap">
+                <i class="fa fa-twitter"></i>
+            </div>
+        </a>
+    </div>
+    <script type="text/javascript">
+        $(()=>{
+            new QRCode("wechat-qr", {
+                text: "https://konb-hui.github.io/blog/2026/10/27/ai-long-term-project/ai-long-term-project/",
+                width: 150,
+                height: 150,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
+        function share(dest) {
+            const qqBase        = "https://connect.qq.com/widget/shareqq/index.html?";
+            const weiboBase     = "https://service.weibo.com/share/share.php?";
+            const qzoneBase     = "https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
+            const facebookBase  = "https://www.facebook.com/sharer/sharer.php?";
+            const twitterBase   = "https://twitter.com/intent/tweet?";
+            const hostUrl       = "https://konb-hui.github.io/blog/2026/10/27/ai-long-term-project/ai-long-term-project/";
+            const title         = "「让 AI 干长期工程：记忆、边界和验收」";
+            const excerpt       = `让 AI 写个脚本，十分钟的事。让 AI 干一件跨三天的活，情况就完全不同了——不是它变笨了，而是状态没了。
+中间那些天里发生了什么，开了什么会，改了哪个文件，被谁推翻了，它全都不知道。上下文一断，前面的功夫就白费。
+我踩了两年这个坑...`;
+            let _URL;
+            switch (dest) {
+                case "qq"       : _URL = qqBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";     break;
+                case "weibo"    : _URL = weiboBase+"url="+hostUrl+"&title="+title+excerpt;                                 break;
+                case "qzone"    : _URL = qzoneBase+"url="+hostUrl+"&title="+title+"&desc=&summary="+excerpt+"&site=cxpy";  break;
+                case "facebook" : _URL = facebookBase+"u="+hostUrl;                                                        break;
+                case "twitter"  : _URL = twitterBase+"text="+title+excerpt+"&url="+hostUrl;                                break;
+            }
+            window.open(_URL);
+        };
+    </script>
+</div>
+                
+                </div>
+            
+            <div class="footer-tag clearfix">
+                <div class="pull-left">
+                <i class="fa fa-tags"></i>
+                    <a class="tag-none-link" href="/blog/tags/AI-%E7%BC%96%E7%A8%8B/" rel="tag">AI 编程</a>, <a class="tag-none-link" href="/blog/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" rel="tag">效率工具</a>, <a class="tag-none-link" href="/blog/tags/%E7%BB%8F%E9%AA%8C/" rel="tag">经验</a>
+                </div>
+                <div class="pull-date">
+                    <time datetime="2026-10-27T08:41:14.498Z" itemprop="dateModified">最后编辑：2026-10-27</time>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+        <nav class="navigation post-navigation clearfix" role="navigation">
+            
+            <div class="nav-previous clearfix">
+                <a title=" 给 AI 编程额度装个看门狗" href="/blog/2026/10/27/quota-watchdog-ai-coding/quota-watchdog-ai-coding/">&lt; 上一篇</a>
+            </div>
+            
+            
+            <div class="nav-next clearfix">
+                <a title=" GKD 手机本地自动化：把规则搬进手机里" href="/blog/2026/10/27/gkd-local-phone-automation/gkd-local-phone-automation/">下一篇 &gt;</a>
+            </div>
+            
+        </nav>
+    
+    
+        <div id="w-comments" class="post-comments bg-image"></div>
+<script>
+    var load_comm = () => {
+        const init = () => {
+            new Waline(Object.assign({
+                el: '#w-comments',
+                path: '/blog/2026/10/27/ai-long-term-project/ai-long-term-project/'
+            }, JSON.parse('{"serverURL":"https://waline-konb-dysy1u8kh-konb-hui.vercel.app/","visitor":true}')));
+        }
+        if (typeof Waline === 'undefined') {
+            const src = 'https://unpkg.com/@waline/client@1/dist/Waline.min.js';
+            $.getScript(src, init);
+        } else {
+            init();
+        }
+    };
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://waline.js.org/">comments powered by Waline.</a></noscript>
+
+    
+</article>
+
+        
+
+            </section>
+
+        
+
+                
+            
+
+<section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
+    <!-- 文章和页面根据splitter来分割，没有的话就从头开始设置为sticky -->
+    
+    
+                <aside id="krw-about" class="widget widget-kratos-about clearfix">
+    <div class="photo-background"></div>
+    <div class="photo-wrapper clearfix">
+        <div class="photo-wrapper-tip text-center">
+            <img class="about-photo" src="/blog/images/avatar.webp" />
+        </div>
+    </div>
+    <div class="textwidget">
+        <p class="text-center"></p>
+    </div>
+    <div class="site-meta">
+        <a class="meta-item" href="/blog/archives/">
+            <span class="title">
+                文章
+            </span>
+            <span class="count">
+                17
+            </span>
+        </a>
+        <a class="meta-item" href="/blog/categories/">
+            <span class="title">
+                分类
+            </span>
+            <span class="count">
+                9
+            </span>
+        </a>
+        <a class="meta-item" href="/blog/tags/">
+            <span class="title">
+                标签
+            </span>
+            <span class="count">
+                14
+            </span>
+        </a>
+    </div>
+</aside>
+            
+                    <div class="sticky-area">
+                
+                
+  <aside id="krw-categories" class="widget widget-kratos-categories clearfix">
+    <h4 class="widget-title"><i class="fa fa-folder"></i>分类目录</h4>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/">成神之路</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E4%BB%A3%E7%A0%81%E8%AE%B0%E5%BD%95/">代码记录</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%88%90%E7%A5%9E%E4%B9%8B%E8%B7%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/">支线任务</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/Rank-D/">Rank D</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E6%94%AF%E7%BA%BF%E4%BB%BB%E5%8A%A1/Rank-E/">Rank E</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E4%BA%8B%E4%BB%B6/">神秘事件</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%A5%9E%E7%A7%98%E5%AE%9D%E8%97%8F/">神秘宝藏</a><span class="category-list-count">1</span></li></ul>
+  </aside>
+
+
+            
+                
+  <aside id="krw-tags" class="widget widget-kratos-tags clearfix">
+    <h4 class="widget-title"><i class="fa fa-tags"></i>标签聚合</h4>
+      <div class="tag-clouds">
+        <a href="/blog/tags/AI-%E7%BC%96%E7%A8%8B/" style="font-size: 0.8em;">AI 编程</a> <a href="/blog/tags/Android/" style="font-size: 0.6em;">Android</a> <a href="/blog/tags/FreeLLMAPI/" style="font-size: 0.6em;">FreeLLMAPI</a> <a href="/blog/tags/GKD/" style="font-size: 0.6em;">GKD</a> <a href="/blog/tags/LLM/" style="font-size: 0.6em;">LLM</a> <a href="/blog/tags/chatGPT/" style="font-size: 0.6em;">chatGPT</a> <a href="/blog/tags/maven/" style="font-size: 0.6em;">maven</a> <a href="/blog/tags/spring/" style="font-size: 0.73em;">spring</a> <a href="/blog/tags/springboot/" style="font-size: 0.67em;">springboot</a> <a href="/blog/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 0.6em;">多智能体</a> <a href="/blog/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 0.6em;">排序算法</a> <a href="/blog/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/" style="font-size: 0.73em;">效率工具</a> <a href="/blog/tags/%E7%BB%8F%E9%AA%8C/" style="font-size: 0.6em;">经验</a> <a href="/blog/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 0.67em;">自动化</a>
+      </div>
+  </aside>
+
+            
+                
+  <aside id="krw-posts" class="widget widget-kratos-posts">
+  <h4 class="widget-title"><i class="fa fa-file"></i>最新文章</h4>
+  <div class="tab-content">
+      <ul class="list-group">
+        
+        
+          
+          
+            <a class="list-group-item" href="/blog/2026/10/27/multi-agent-delegation/multi-agent-delegation/"><i class="fa  fa-book"></i> 多智能体怎么带：把活拆开、派出去、验收回来</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2026/10/27/gkd-local-phone-automation/gkd-local-phone-automation/"><i class="fa  fa-book"></i> GKD 手机本地自动化：把规则搬进手机里</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2026/10/27/ai-long-term-project/ai-long-term-project/"><i class="fa  fa-book"></i> 让 AI 干长期工程：记忆、边界和验收</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2026/10/27/quota-watchdog-ai-coding/quota-watchdog-ai-coding/"><i class="fa  fa-book"></i> 给 AI 编程额度装个看门狗</a>
+            
+          
+        
+          
+          
+            <a class="list-group-item" href="/blog/2026/10/27/freellmapi-free-gateway/freellmapi-free-gateway/"><i class="fa  fa-book"></i> 把几十家免费大模型收成一个端点：FreeLLMAPI 实战</a>
+            
+          
+        
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+      </ul>
+  </div>
+  </aside>
+
+            
+    </div>
+</section>
+        
+        </div>
+    </div>
+</div>
+<footer>
+    <div id="footer"  >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 footer-list text-center">
+                    <ul class="kratos-social-icons">
+                        
+                        <li><a href="mailto:konbhui23@gmail.com"><i class="fa fa-envelope"></i></a></li>
+                        
+                        
+                        
+                        
+                        
+                        <li><a target="_blank" rel="nofollow" href="https://github.com/konb-hui"><i class="fa fa-github"></i></a></li>
+                        
+                    </ul>
+                    <ul class="kratos-copyright">
+                        <div>
+                            <li>&copy; 2026 konb的博客 版权所有.</li>
+                            <li>本站已运行<span id="span_dt">Loading...</span></li>
+                        </div>
+                        <div>
+                            <li>Theme <a href="https://github.com/Candinya/Kratos-Rebirth" target="_blank">Kratos:Rebirth</a></li>
+                            <li>Site built with&nbsp;<i class="fa fa-heart throb" style="color:#d43f57"></i>&nbsp;by konb.</li>
+                        </div>
+                        <div>
+                            <li>Powered by <a href="https://hexo.io" target="_blank" rel="nofollow">Hexo</a></li>
+                            <li>Hosted on <a href="https://github.io" target="_blank">Github Pages</a></li>
+                        </div>
+                        <div>
+                            
+                            
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="kr-tool text-center">
+            <div class="tool">
+                
+                    <div class="box search-box">
+                        <a href="/blog/search/">
+                            <span class="fa fa-search"></span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="box theme-box" id="darkmode-switch">
+                        <span class="fa fa-adjust"></span>
+                    </div>
+                
+                
+            </div>
+            <div class="box gotop-box">
+                <span class="fa fa-chevron-up"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+
+        <script defer src="https://unpkg.com/bootstrap@3.3.4/dist/js/bootstrap.min.js"></script>
+<script defer src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    if (!window.kr) {
+        window.kr = {};
+    }
+    window.kr.notMobile = (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)));
+    window.kr.siteRoot = "/blog/";
+</script>
+
+
+    <script async src="/blog/js/candy.min.js"></script>
+
+
+
+
+    <script defer src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+<script defer src="https://unpkg.com/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script defer src="/blog/js/kratosr.min.js"></script>
+<script defer src="/blog/js/pjax.min.js"></script>
+
+
+
+<!-- Extra support for third-party plguins  -->
+
+
+    </body>
+</html>
